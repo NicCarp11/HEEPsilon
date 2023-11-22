@@ -37,7 +37,6 @@
 
 //Include kernels!
 #include "kernels/conv/conv.h"
-#include "kernels/bitcount/bitcount.h"
 #include "kernels/reversebits/reversebits.h"
 #include "kernels/gsm/gsm.h"
 #include "kernels/sha2/sha2.h"
