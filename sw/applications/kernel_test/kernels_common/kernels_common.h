@@ -140,11 +140,13 @@ typedef struct
     uint8_t     col_n;
     uint8_t     in_n;
     uint8_t     out_n;
-    void        ( *config ) (void);
+    void        ( *config ) (int input_ch, int output_ch);
     void        ( *func )   (void);
+    void        ( *loading_buffer )  (void);
     uint32_t    ( *check )  (void);
     int8_t      name[ KERNEL_NAME_LENGTH_MAX ];
 } kcom_kernel_t;
+
 
 
 typedef struct
@@ -166,9 +168,9 @@ typedef struct
     kcom_time_diff_t    cgra;
     kcom_time_diff_t    load;
     kcom_time_diff_t    conf;
+    kcom_time_diff_t    loading_result; 
     kcom_time_diff_t    dead;
 } kcom_timing_t;
-
 typedef struct
 {
     kcom_col_perf_t    cols[CGRA_N_COLS];
@@ -185,6 +187,7 @@ typedef struct
     kcom_param_t conf;
     kcom_param_t cgra;
     kcom_param_t repo;
+    kcom_param_t loading_result;
 #if MEASURE_RATIO
     kcom_param_t repo_conf;
     kcom_param_t cyc_ratio;

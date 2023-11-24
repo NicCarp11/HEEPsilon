@@ -57,7 +57,8 @@
 /**                                                                        **/
 /****************************************************************************/
 
-static void        config  (void);
+static void        config  (int input_ch, int output_ch);
+static void         loading_buffer(void);
 static void        software(void);
 static uint32_t    check   (void);
 
@@ -77,6 +78,8 @@ static int32_t cgra_output[CGRA_COLS][OUT_VAR_DEPTH]   __attribute__ ((aligned (
 static int32_t buffer[row_output][col_output - 1] __attribute__ ((aligned (4)));
 static int32_t output_from_CGRA[N_filter][row_output][col_output] __attribute__ ((aligned (4)));
 
+static int input_channel;
+static int output_channel;
 
 
     static uint32_t	i_index_soft;
@@ -105,6 +108,7 @@ extern kcom_kernel_t conv_interleaved_kernel = {
     .config = config,
     .func   = software,
     .check  = check,
+    .loading_buffer = loading_buffer,
     .name   = "conv_interleaved",
 };
 
@@ -114,9 +118,10 @@ extern kcom_kernel_t conv_interleaved_kernel = {
 /**                                                                        **/
 /****************************************************************************/
 
-void config()
+void config(int input_ch, int output_ch)
 {
-
+input_channel = input_ch;
+output_channel = output_ch;
 cgra_input[3][0] = &buffer[0][0];
 
     for(int16_t i = 0; i < 3; i++) {
@@ -134,7 +139,30 @@ cgra_input[3][0] = &buffer[0][0];
 
 }
 
+void loading_buffer(){
+if(input_channel == 0){
+    for(int i = 0; i < row_output; i++){
+        for(int j = 0; j < col_output; j++){
+            output_from_CGRA[output_channel][i][j] = 0; 
+        }
+    }
+    
+}
+    for(int i = 0; i < row_output; i++){
+        for(int j = 0; j < col_output; j++){
+            buffer[i][j] = cgra_output[3][i*col_output + j];
+        }
+    }
+    
+        for(int i = 0; i < row_output; i++){
+            for(int j = 0; j < col_output; j++){
+                output_from_CGRA[output_channel][i][j] += buffer[i][j];
+                
+                
+        }
+    }
 
+}
 
 
 void software(void)
@@ -146,33 +174,25 @@ void software(void)
 
 uint32_t check(void)
 {
+    printf("Check begins: \n");
     uint32_t errors = 0;
-        
+
+for(int l = 0; l < N_filter; l ++){
     for(int i = 0; i < row_output; i++){
         for(int j = 0; j < col_output; j++){
-            buffer[i][j] = cgra_output[3][i*(col_output - 1) + j];
-        }
-    }
-    for(int i = 0; i < row_output; i++){
-        for(int j = 1; j < col_output ; j++){
-            if(outputs[0][0][i][j] != buffer[i][(j-1)]){
+            if(outputs[0][0][i][j] != output_from_CGRA[l][i][j]){
                 errors++;
-                printf("Error at %d %d\n", i, j);
-                printf("Expected %d, got %d\n", outputs[0][0][i][j], buffer[i][(j-1)]);
             }
         }
     }
-    if(errors == 0){
-        printf("No errors\n");
-    }
-    else{
+
+}
+
         printf("Errors: %d\n", errors);
-    }
-
-
-
+    
     return errors;
 }
+
 
 /****************************************************************************/
 /**                                                                        **/

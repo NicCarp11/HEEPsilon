@@ -20,7 +20,7 @@ MEMORY_BANKS = 2
 PROJECT ?= hello_world
 
 MEMORY_BANKS ?= 2
-MEMORY_BANKS_IL ?= 4
+MEMORY_BANKS_IL ?= 2
   
 export HEEP_DIR = hw/vendor/esl_epfl_x_heep/
 include $(HEEP_DIR)Makefile.venv
