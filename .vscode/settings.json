@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "*.tpl": "c",
+        "function.h": "c",
+        "conv.h": "c"
+    }
+}
