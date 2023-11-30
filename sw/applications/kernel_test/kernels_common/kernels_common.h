@@ -140,7 +140,7 @@ typedef struct
     uint8_t     col_n;
     uint8_t     in_n;
     uint8_t     out_n;
-    void        ( *config ) (int input_ch, int output_ch);
+    void        ( *config ) (int output_row, int output_col);
     void        ( *func )   (void);
     void        ( *loading_buffer )  (void);
     uint32_t    ( *check )  (void);
