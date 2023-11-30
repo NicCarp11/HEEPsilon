@@ -10,7 +10,7 @@
 
 
 
-void __attribute((noinline)) im2col(int32_t *input_to_CGRA, int32_t *filter_to_CGRA, int out_row, int out_col, int output_channel)
+void __attribute((noinline)) im2col_conv(int32_t *input_to_CGRA, int32_t *filter_to_CGRA, int out_row, int out_col, int output_channel)
 {
 
   int i, j, k, l, c, m, n, o, p, q, r, s, t, u, v, w;
