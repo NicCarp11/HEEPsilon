@@ -38,7 +38,7 @@
 #include "../../kernels_common/kernels_common.h"
 
 // general parameters
-
+#define CHW_notHWC 0
 #define stride 1
 #define padding 0
 #define N_filter 16
