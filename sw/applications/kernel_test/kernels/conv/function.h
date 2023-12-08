@@ -7,7 +7,7 @@
 
 
 /*input 16x16x16*/
-static int32_t input[batch_size][C_input][row_input][col_input]=
+static int32_t  input[batch_size][C_input][row_input][col_input]=
 {
 {{
        {00, 01, 02, 03, 04, 05, 06, 07, 8, 9, 10, 11, 12, 13, 14, 15},
@@ -319,7 +319,7 @@ static int32_t input[batch_size][C_input][row_input][col_input]=
 
 
 
-static int32_t filter[N_filter][C_filter][row_filter][col_filter]=
+static int32_t  filter[N_filter][C_filter][row_filter][col_filter]=
 {
     {{    {1, 2, 3},
           {4, 5, 6},

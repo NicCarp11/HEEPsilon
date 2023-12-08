@@ -61,7 +61,7 @@
 #define PRINT_TABBED            0
 #define PRINT_PLOT              0
 #define PRINT_RESULTS           0
-#define PRINT_CGRA_RESULTS      0
+#define PRINT_CGRA_RESULTS      1
 
 #define REPEAT_FIRST_INPUT      1
 
@@ -95,7 +95,7 @@
 #define KERNEL_NAME_LENGTH_MAX          20
 #define RANDOM_SEED                     12346
 
-#define CGRA_ACCESS_FLAT_COST_CYCLES    80  // Measured in Questasim, do not change
+#define CGRA_ACCESS_FLAT_COST_CYCLES    190  // Measured in Questasim, do not change
 
 /* Macros */
 
@@ -106,7 +106,7 @@
 #endif //ENABLE_PRINTF
 #if ENABLE_DEBUG_PRINTF
     #define PRINTDBG(fmt, ...)  printf(fmt, ## __VA_ARGS__)
-    #define PRINTLINE()         printf("%d\n\r", __LINE__)
+    #define PRINTLINE()         printf("%d\n", __LINE__)
 #else
     #define PRINTDBG(...)
     #define PRINTLINE()
@@ -148,7 +148,6 @@ typedef struct
 } kcom_kernel_t;
 
 
-
 typedef struct
 {
     uint32_t cyc_act;
@@ -171,6 +170,7 @@ typedef struct
     kcom_time_diff_t    loading_result; 
     kcom_time_diff_t    dead;
 } kcom_timing_t;
+
 typedef struct
 {
     kcom_col_perf_t    cols[CGRA_N_COLS];

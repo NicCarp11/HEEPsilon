@@ -41,7 +41,7 @@
 
 #define stride 1
 #define padding 0
-#define N_filter 16
+#define N_filter 1
 #define channel 16
 #define batch_size 1
 

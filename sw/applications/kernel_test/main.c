@@ -43,7 +43,6 @@
 #include "kernels/sha/sha.h"
 #include "kernels/strsearch/strsearch.h"
 #include "kernels/sqrt/sqrt.h"
-#include "kernels/conv_interleaved/conv_interleaved.h"
 
 /****************************************************************************/
 /**                                                                        **/
@@ -76,7 +75,7 @@
 /****************************************************************************/
 
 static kcom_kernel_t *kernels[] = {
-        // &conv_kernel,
+        &conv_kernel,
         // &reve_kernel,
         // &bitc_kernel,
         // &sqrt_kernel,
@@ -85,7 +84,6 @@ static kcom_kernel_t *kernels[] = {
         // &sha_kernel,
         // &sha2_kernel,
         // Add all other kernels here
-        &conv_interleaved_kernel,
     };
 
 static kcom_perf_t  kperf;
@@ -135,8 +133,8 @@ void main()
 
         for( uint16_t it_idx = 0; it_idx < ITERATIONS_PER_KERNEL; it_idx++ )
         {
-kcom_time_t spent_tot_CGRA = 0;
-kcom_time_t spent_tot_loading = 0; 
+                kcom_time_t spent_tot_CGRA = 0;
+    kcom_time_t spent_tot_loading = 0; 
             /* Reset the CGRA performance counters */
             kcom_rstPerfCounter();
 
@@ -167,11 +165,12 @@ kperf.time.loading_result.spent_cy = 0;
                 kcom_waitingForIntr();
                 
                 spent_tot_CGRA += kperf.time.cgra.spent_cy - kperf.time.dead.spent_cy;
+                //printf("%d \n", spent_tot_CGRA);
             // Time is stopped inside the interrupt handler to make it as fast as possible
 
                 kcom_perfRecordIntrSet( &(kperf.time.loading_result));
                 kcom_perfRecordStart(  &(kperf.time.loading_result));
-                kernel->loading_buffer();
+                //kernel->loading_buffer();
                 kcom_perfRecordStop( &(kperf.time.loading_result));
                 spent_tot_loading += kperf.time.loading_result.spent_cy - kperf.time.dead.spent_cy;
 
