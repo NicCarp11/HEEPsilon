@@ -61,7 +61,7 @@
 #define PRINT_TABBED            0
 #define PRINT_PLOT              0
 #define PRINT_RESULTS           0
-#define PRINT_CGRA_RESULTS      0
+#define PRINT_CGRA_RESULTS      1
 
 #define REPEAT_FIRST_INPUT      1
 
@@ -83,7 +83,7 @@
 #define PIN_TO_CTRL_VCD         20   // In sync w/ hardware, do not change
 #define PIN_TO_NEW_VCD          21
 
-#define ITERATIONS_PER_KERNEL   10
+#define ITERATIONS_PER_KERNEL   2
 #define PERF_PLOT_SCALE_DOWN    5
 
 
