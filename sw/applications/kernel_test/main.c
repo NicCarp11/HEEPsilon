@@ -134,6 +134,9 @@ void main()
 
         for( uint16_t it_idx = 0; it_idx < ITERATIONS_PER_KERNEL; it_idx++ )
         {
+    kcom_time_t spent_time_CGRA = 0;
+    kcom_time_t spent_time_loading = 0; 
+    kcom_time_t spent_time_im2col = 0;
             /* Reset the CGRA performance counters */
             kcom_rstPerfCounter();
 
@@ -145,15 +148,52 @@ void main()
                 kcom_resetRand();
             }
 #endif //REPEAT_FIRST_INPUT
-        kcom_perfRecordStart(   &(kperf.time.conf) );
-        kernel->config();
-       
-        kcom_perfRecordStop(    &(kperf.time.conf) );
+        for(int output_channel = 0; output_channel < N_filter; output_channel++){
+            for(int out_row = 0; out_row < row_output; out_row++){
+                for(int out_col = 0; out_col < col_output; out_col++){
+
+                /*im2col*/
+                kcom_perfRecordIntrSet( &(kperf.time.im2col));
+                kcom_perfRecordStart(  &(kperf.time.im2col));
+                      
+                      kernel->im2col(output_channel,out_row,out_col);
+                      kcom_perfRecordStop( &(kperf.time.im2col));
+                      spent_time_im2col += kperf.time.im2col.spent_cy - kperf.time.dead.spent_cy;
+
+                /*config*/
+                kernel->config();
+
             /* Obtention of dead-zone-time */
 #if ANALYZE_EVERYTHING
             kcom_perfRecordStart(   &(kperf.time.dead) );
             kcom_perfRecordStop(    &(kperf.time.dead) );
 #endif //ANALYZE_EVERYTHING
+
+                 /* CGRA Execution */
+            kcom_perfRecordIntrSet( &(kperf.time.cgra) );
+            kcom_perfRecordStart(   &(kperf.time.cgra) );
+                kcom_launchKernel( kernel_id );
+                kcom_waitingForIntr();
+                
+                spent_time_CGRA += kperf.time.cgra.spent_cy - kperf.time.dead.spent_cy;
+                
+            // Time is stopped inside the interrupt handler to make it as fast as possible
+
+                kcom_perfRecordIntrSet( &(kperf.time.loading_result));
+                kcom_perfRecordStart(  &(kperf.time.loading_result));
+                kernel->loading_buffer(output_channel,out_row,out_col);
+                kcom_perfRecordStop( &(kperf.time.loading_result));
+                spent_time_loading += kperf.time.loading_result.spent_cy - kperf.time.dead.spent_cy;
+
+
+                }
+            }
+        }
+         kperf.time.loading_result.spent_cy =  spent_time_loading;
+         kperf.time.cgra.spent_cy = spent_time_CGRA;
+         kperf.time.im2col.spent_cy = spent_time_im2col;
+        
+
 
             /* Software */
 #if EXECUTE_SOFTWARE
@@ -166,14 +206,7 @@ void main()
 #endif //ANALYZE_EVERYTHING
 #endif //EXECUTE_SOFTWARE
 
-            /* CGRA Execution */
-            kcom_perfRecordIntrSet( &(kperf.time.cgra) );
-            kcom_perfRecordStart(   &(kperf.time.cgra) );
-                kcom_launchKernel( kernel_id );
-                printf("WFI \n\r");
-                kcom_waitingForIntr();
-                printf("%d \n\r", kperf.time.cgra);
-            // Time is stopped inside the interrupt handler to make it as fast as possible
+           
 
 #if PERFORM_RES_CHECK
             /* Result comparison */
