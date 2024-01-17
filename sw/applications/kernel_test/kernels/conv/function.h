@@ -7,7 +7,7 @@
 
 #if CHW_notHWC == 1
 static int32_t output[N_output][channel_output][row_output][col_output];
-void conv2D()
+void __attribute__((optimize("O0")))conv2D()
 {
 
   int32_t l, r, c, k, i, j, w, t;
@@ -49,7 +49,7 @@ void conv2D()
 
 }
 #elif CHW_notHWC == 0
-void conv2D() 
+void __attribute__((optimize("Ofast"))) conv2D()
 {
   
   int32_t l, r, c, k, i, j, w, t;

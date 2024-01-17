@@ -38,7 +38,7 @@
 #include "../../kernels_common/kernels_common.h"
 
 // general parameters
-
+#define CHW_notHWC 0
 #define stride 1
 #define padding 0
 #define N_filter 16
@@ -387,7 +387,7 @@ static int32_t input[batch_size][C_input][row_input][col_input]=
 
 
 /*filter 16x3x3x16*/
-static int32_t filter[N_filter][C_filter][row_filter][col_filter]=
+static int32_t __attribute__((section(".xheep_data_interleaved"))) filter[N_filter][C_filter][row_filter][col_filter]=
 {
     {{    {1, 2, 3},
           {4, 5, 6},
@@ -1754,7 +1754,7 @@ static int32_t input[batch_size][col_input][row_input][channel]=
 }
 }};
 
-static int32_t filter[N_filter][row_filter][col_filter][channel]=
+static int32_t __attribute__((section(".xheep_data_interleaved"))) filter[N_filter][row_filter][col_filter][channel]=
 {
 {
 {
@@ -2078,7 +2078,7 @@ static int32_t filter[N_filter][row_filter][col_filter][channel]=
 }
 };
 
-static int32_t output[N_output][channel_output][row_output][col_output];
+static int32_t __attribute__((section(".xheep_data_interleaved"))) output[N_output][channel_output][row_output][col_output];
 
 #endif
 #endif // _REVERSEBITS_H_

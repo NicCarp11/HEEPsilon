@@ -148,7 +148,6 @@ void main()
                 kcom_resetRand();
             }
 #endif //REPEAT_FIRST_INPUT
-        for(int output_channel = 0; output_channel < N_filter; output_channel++){
             for(int out_row = 0; out_row < row_output; out_row++){
                 for(int out_col = 0; out_col < col_output; out_col++){
 
@@ -156,7 +155,7 @@ void main()
                 kcom_perfRecordIntrSet( &(kperf.time.im2col));
                 kcom_perfRecordStart(  &(kperf.time.im2col));
                       
-                      kernel->im2col(output_channel,out_row,out_col);
+                      kernel->im2col(out_row,out_col);
                       kcom_perfRecordStop( &(kperf.time.im2col));
                       spent_time_im2col += kperf.time.im2col.spent_cy - kperf.time.dead.spent_cy;
 
@@ -181,14 +180,13 @@ void main()
 
                 kcom_perfRecordIntrSet( &(kperf.time.loading_result));
                 kcom_perfRecordStart(  &(kperf.time.loading_result));
-                kernel->loading_buffer(output_channel,out_row,out_col);
+                kernel->loading_buffer(out_row,out_col);
                 kcom_perfRecordStop( &(kperf.time.loading_result));
                 spent_time_loading += kperf.time.loading_result.spent_cy - kperf.time.dead.spent_cy;
 
 
                 }
             }
-        }
          kperf.time.loading_result.spent_cy =  spent_time_loading;
          kperf.time.cgra.spent_cy = spent_time_CGRA;
          kperf.time.im2col.spent_cy = spent_time_im2col;
