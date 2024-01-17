@@ -83,10 +83,11 @@ static uint32_t cgra_kmem_conv[CGRA_KMEM_SIZE] = { 0x0, 0xf00f, 0x0, 0x0, 0x0, 0
 
 
 extern int32_t output[N_output][channel_output][row_output][col_output];
-static int32_t cgra_input[CGRA_COLS][IN_VAR_DEPTH]     __attribute__ ((aligned (4)));
-static int32_t cgra_output[CGRA_COLS][OUT_VAR_DEPTH]   __attribute__ ((aligned (4)));
+static int32_t __attribute__((section(".xheep_data_interleaved"))) cgra_input[CGRA_COLS][IN_VAR_DEPTH]  ;
+static int32_t __attribute__((section(".xheep_data_interleaved"))) cgra_output[CGRA_COLS][OUT_VAR_DEPTH];
 static int32_t __attribute__((section(".xheep_data_interleaved"))) input_to_CGRA[row_filter * col_filter * C_filter];
-static int32_t __attribute__((section(".xheep_data_interleaved"))) output_from_CGRA[N_filter][row_output][col_output] __attribute__ ((aligned (4)));
+static int32_t __attribute__((section(".xheep_data_interleaved"))) output_from_CGRA[N_filter][row_output][col_output];
+static int32_t __attribute__((section(".xheep_data_interleaved"))) filter_to_CGRA[N_filter][row_filter][col_filter][channel];
 
 static int out_row;
 static int out_col;
@@ -136,6 +137,16 @@ out_col = out_col;
 output_channel = output_channel;
 im2col_conv(input_to_CGRA, out_row, out_col);
 
+for(int i = 0; i < N_filter; i++){
+    for(int j = 0; j < row_filter; j++){
+        for(int k = 0; k < col_filter; k++){
+            for(int l = 0; l < channel; l++){
+                filter_to_CGRA[i][j][k][l] = filter[i][j][k][l];
+            }
+        }
+    }
+}
+
 }
 void config(void)
 {
@@ -143,10 +154,10 @@ void config(void)
 //  config if the LWD = 32
 
 for(int i = 0; i < 4; i++){
-    cgra_input[0][i] = &(filter[(4*i)][0][0][0]);
-    cgra_input[1][i] = &(filter[(4*i)+1][0][0][0]);
-    cgra_input[2][i] = &(filter[(4*i)+2][0][0][0]);
-    cgra_input[3][i] = &(filter[(4*i)+3][0][0][0]);
+    cgra_input[0][i] = &(filter_to_CGRA[(4*i)][0][0][0]);
+    cgra_input[1][i] = &(filter_to_CGRA[(4*i)+1][0][0][0]);
+    cgra_input[2][i] = &(filter_to_CGRA[(4*i)+2][0][0][0]);
+    cgra_input[3][i] = &(filter_to_CGRA[(4*i)+3][0][0][0]);
 }
 
 for(int i = 4; i < 8; i++){

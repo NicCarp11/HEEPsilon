@@ -1754,7 +1754,7 @@ static int32_t input[batch_size][col_input][row_input][channel]=
 }
 }};
 
-static int32_t __attribute__((section(".xheep_data_interleaved"))) filter[N_filter][row_filter][col_filter][channel]=
+static int32_t filter[N_filter][row_filter][col_filter][channel]=
 {
 {
 {
