@@ -140,7 +140,7 @@ typedef struct
     uint8_t     col_n;
     uint8_t     in_n;
     uint8_t     out_n;
-    void        ( *config ) (int output_row, int output_col);
+    void        ( *config ) (int input_ch, int output_ch);
     void        ( *func )   (void);
     void        ( *loading_buffer )  (void);
     uint32_t    ( *check )  (void);
@@ -161,6 +161,7 @@ typedef struct
     kcom_time_t spent_cy;
 } kcom_time_diff_t;
 
+
 typedef struct
 {
     kcom_time_diff_t    sw;
@@ -168,7 +169,6 @@ typedef struct
     kcom_time_diff_t    load;
     kcom_time_diff_t    conf;
     kcom_time_diff_t    loading_result; 
-    kcom_time_diff_t    im2col;
     kcom_time_diff_t    dead;
 } kcom_timing_t;
 

@@ -219,7 +219,6 @@ void kcom_populateRun( kcom_run_t *run, kcom_perf_t *perf, uint32_t it_idx )
     (run[ it_idx ]).conf        = 0;
     (run[ it_idx ]).cgra        = perf->time.cgra.spent_cy;
     (run[ it_idx ]).loading_result = perf->time.loading_result.spent_cy;
-    (run[ it_idx ]).im2col =    perf->time.im2col.spent_cy;
     (run[ it_idx ]).repo        = perf->cols_max.cyc_act + perf->cols_max.cyc_stl;
 #if MEASURE_RATIO
     (run[ it_idx ]).repo_conf   = 0;

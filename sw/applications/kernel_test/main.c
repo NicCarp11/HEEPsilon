@@ -147,10 +147,9 @@ void main()
                 kcom_resetRand();
             }
 #endif //REPEAT_FIRST_INPUT
- for(int output_row = 0; output_row < row_output; output_row++){
-                for(int output_column = 0; output_column < col_output; output_column++){
-
-                        kernel->config(output_row,output_column);
+            for(int output_channel = 0; output_channel < N_filter; output_channel++){
+                for(int input_channel = 0; input_channel < C_input; input_channel++){
+                        kernel->config(input_channel,output_channel);
 kperf.time.cgra.spent_cy = 0;
 kperf.time.loading_result.spent_cy = 0;
             /* Obtention of dead-zone-time */
@@ -166,13 +165,16 @@ kperf.time.loading_result.spent_cy = 0;
                 kcom_waitingForIntr();
                 
                 spent_tot_CGRA += kperf.time.cgra.spent_cy - kperf.time.dead.spent_cy;
+                //printf("%d \n", spent_tot_CGRA);
             // Time is stopped inside the interrupt handler to make it as fast as possible
 
                 kcom_perfRecordIntrSet( &(kperf.time.loading_result));
                 kcom_perfRecordStart(  &(kperf.time.loading_result));
-                kernel->loading_buffer();
+                //kernel->loading_buffer();
                 kcom_perfRecordStop( &(kperf.time.loading_result));
                 spent_tot_loading += kperf.time.loading_result.spent_cy - kperf.time.dead.spent_cy;
+
+
                 }
             }
          kperf.time.loading_result.spent_cy =  spent_tot_loading;
