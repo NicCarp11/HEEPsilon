@@ -15,9 +15,31 @@ void __attribute((noinline)) im2col_conv(int32_t *input_to_CGRA, int out_row, in
 
   int i, j, k, l, c, m, n, o, p, q, r, s, t, u, v, w;
 
+#if CHW_notHWC == 1
+
+for(i = 0; i < channel; i++){
+input_to_CGRA[0+row_filter*col_filter*i]=input[0][i][0+out_row][0+out_col];
+input_to_CGRA[1+row_filter*col_filter*i]=input[0][i][0+out_row][1+out_col];
+input_to_CGRA[2+row_filter*col_filter*i]=input[0][i][0+out_row][2+out_col];
+input_to_CGRA[3+row_filter*col_filter*i]=input[0][i][1+out_row][0+out_col];
+input_to_CGRA[4+row_filter*col_filter*i]=input[0][i][1+out_row][1+out_col];
+input_to_CGRA[5+row_filter*col_filter*i]=input[0][i][1+out_row][2+out_col];
+input_to_CGRA[6+row_filter*col_filter*i]=input[0][i][2+out_row][0+out_col];
+input_to_CGRA[7+row_filter*col_filter*i]=input[0][i][2+out_row][1+out_col];
+input_to_CGRA[8+row_filter*col_filter*i]=input[0][i][2+out_row][2+out_col];
+}
+
+
+
+#elif CHW_notHWC == 0
 
 for (i = 0; i < row_filter; i++)
       {
+
+
+             
+
+
 
              input_to_CGRA[0+C_filter*0+C_filter*col_filter*i]=input[0][i+out_row][0+out_col][0]; 
             
@@ -147,11 +169,12 @@ for (i = 0; i < row_filter; i++)
 
              input_to_CGRA[15+C_filter*2+C_filter*col_filter*i]=input[0][i+out_row][2+out_col][15]; 
           
-                  
+      
             
           }
 
-        }
+#endif    
+}    
       
     
   
