@@ -38,7 +38,7 @@
 #include "../../kernels_common/kernels_common.h"
 
 // general parameters
-#define CHW_notHWC 1
+#define CHW_notHWC 0
 #define stride 1
 #define padding 0
 #define N_filter 16
@@ -66,6 +66,8 @@
 #define channel_output N_filter
 extern kcom_kernel_t conv_kernel;
 #if CHW_notHWC == 1
+static int32_t __attribute__((section(".xheep_data_interleaved"))) filter_to_CGRA[C_filter][row_filter][col_filter][N_filter];
+
 static int32_t input[batch_size][C_input][row_input][col_input]=
 {
 {{
@@ -1424,6 +1426,8 @@ static int32_t filter[N_filter][C_filter][row_filter][col_filter]=
 
 #elif CHW_notHWC == 0
 /*input 16x16x16 HWC */ 
+static int32_t __attribute__((section(".xheep_data_interleaved"))) filter_to_CGRA[row_filter][col_filter][C_filter][N_filter];
+
 static int32_t input[batch_size][col_input][row_input][channel]=
 {
 {{
