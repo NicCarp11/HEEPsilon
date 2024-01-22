@@ -164,11 +164,18 @@ for(int i = 0; i < 4; i++){
 }
 
 for(int i = 4; i < 8; i++){
+    cgra_input[0][i]=&(filter[output_channel][0][0][(i%4)*4]);
+    cgra_input[1][i]=&(filter[output_channel][0][0][(i%4)*4]);
+    cgra_input[2][i]=&(filter[output_channel][0][0][(i%4)*4]);
+    cgra_input[3][i]=&(filter[output_channel][0][0][(i%4)*4]);    
+
+/*
     cgra_input[0][i] = &(filter_to_CGRA[(i%4)*4]);
     cgra_input[1][i] = &(filter_to_CGRA[(i%4)*4+1]);
     cgra_input[2][i] = &(filter_to_CGRA[(i%4)*4+2]);
     cgra_input[3][i] = &(filter_to_CGRA[(i%4)*4+3]);
-}
+
+*/}
 
 
 /*
