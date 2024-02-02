@@ -6,7 +6,7 @@
 
 
 #if CHW_notHWC == 1
-static int32_t output[N_output][channel_output][row_output][col_output];
+
 void __attribute__((optimize("O0")))conv2D()
 {
 
