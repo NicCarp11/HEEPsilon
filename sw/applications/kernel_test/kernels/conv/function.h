@@ -71,8 +71,10 @@ void conv2D()
               for (j = 0; j < col_filter; j++)
               {
                   for (w = 0; w < C_filter; w++)
-                  {
+                  {     
+                        
                         data = input[l][r+i][c+j][w];
+                        
                         coeff = filter[k][i][j][w];
                         S+= coeff*data;
 

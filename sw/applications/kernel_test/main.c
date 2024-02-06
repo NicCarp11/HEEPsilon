@@ -28,6 +28,8 @@
 */
 
 #define _KERNELS_C
+#define NICOLO 0
+#define JUAN 1
 
 /****************************************************************************/
 /**                                                                        **/
@@ -147,18 +149,78 @@ void main()
                 kcom_resetRand();
             }
 #endif //REPEAT_FIRST_INPUT
-        for(int output_channel = 0; output_channel < N_filter; output_channel++){
+                /*im2col*/
+
+
+
+
+#if JUAN           
+
+
+        for(int output_channel = 0; output_channel < channel_output; output_channel++){
             for(int out_row = 0; out_row < row_output; out_row++){
                 for(int out_col = 0; out_col < col_output; out_col++){
 
-                /*im2col*/
-                kcom_perfRecordIntrSet( &(kperf.time.im2col));
-                kcom_perfRecordStart(  &(kperf.time.im2col));
-                      
-                      kernel->im2col(output_channel,out_row,out_col);
-                      kcom_perfRecordStop( &(kperf.time.im2col));
-                      spent_time_im2col += kperf.time.im2col.spent_cy - kperf.time.dead.spent_cy;
+                    if(out_col == 0){
+                 kcom_perfRecordIntrSet( &(kperf.time.im2col) );
+                    kcom_perfRecordStart(   &(kperf.time.im2col) );
+                    kernel->im2col(output_channel,out_row,0);
+                    kcom_perfRecordStop( &(kperf.time.im2col));
+                    spent_time_im2col += kperf.time.im2col.spent_cy - kperf.time.dead.spent_cy;     
 
+                    kernel->config();
+                    kcom_perfRecordIntrSet( &(kperf.time.cgra) );
+                    kcom_perfRecordStart(   &(kperf.time.cgra) );
+                    kcom_launchKernel( kernel_id );
+                    kcom_waitingForIntr();
+                    spent_time_CGRA += kperf.time.cgra.spent_cy - kperf.time.dead.spent_cy;
+                    kernel->loading_buffer(output_channel,out_row,0);
+                    }
+                    
+                /*config*/
+                kernel->config();
+
+            /* Obtention of dead-zone-time */
+#if ANALYZE_EVERYTHING
+            kcom_perfRecordStart(   &(kperf.time.dead) );
+            kcom_perfRecordStop(    &(kperf.time.dead) );
+#endif //ANALYZE_EVERYTHING
+
+                 /* CGRA Execution */
+            kcom_perfRecordIntrSet( &(kperf.time.cgra) );
+            kcom_perfRecordStart(   &(kperf.time.cgra) );
+
+
+                kcom_launchKernel( kernel_id );
+
+                        kernel->im2col(output_channel,out_row,out_col+1);
+
+                     
+                    kcom_waitingForIntr();
+
+
+                spent_time_CGRA += kperf.time.cgra.spent_cy - kperf.time.dead.spent_cy;
+                
+                kcom_perfRecordIntrSet( &(kperf.time.loading_result));
+                kcom_perfRecordStart(  &(kperf.time.loading_result));
+
+                kernel->loading_buffer(output_channel,out_row,out_col);
+
+                kcom_perfRecordStop( &(kperf.time.loading_result));
+                spent_time_loading += kperf.time.loading_result.spent_cy - kperf.time.dead.spent_cy;
+                
+                    
+
+#elif NICOLO
+        for(int output_channel = 0; output_channel < channel_output; output_channel++){
+            for(int out_row = 0; out_row < row_output; out_row++){
+                for(int out_col = 0; out_col < col_output; out_col++){
+                
+                    kcom_perfRecordStart(   &(kperf.time.im2col) );
+                    kernel->im2col(output_channel,out_row,out_col);
+                    kcom_perfRecordStop( &(kperf.time.im2col));
+                    spent_time_im2col += kperf.time.im2col.spent_cy - kperf.time.dead.spent_cy;
+                    
                 /*config*/
                 kernel->config();
 
@@ -173,16 +235,21 @@ void main()
             kcom_perfRecordStart(   &(kperf.time.cgra) );
                 kcom_launchKernel( kernel_id );
                 kcom_waitingForIntr();
-                
                 spent_time_CGRA += kperf.time.cgra.spent_cy - kperf.time.dead.spent_cy;
                 
-            // Time is stopped inside the interrupt handler to make it as fast as possible
-
-                kcom_perfRecordIntrSet( &(kperf.time.loading_result));
+                                kcom_perfRecordIntrSet( &(kperf.time.loading_result));
                 kcom_perfRecordStart(  &(kperf.time.loading_result));
                 kernel->loading_buffer(output_channel,out_row,out_col);
                 kcom_perfRecordStop( &(kperf.time.loading_result));
                 spent_time_loading += kperf.time.loading_result.spent_cy - kperf.time.dead.spent_cy;
+#endif
+                
+                
+
+                
+            // Time is stopped inside the interrupt handler to make it as fast as possible
+
+
 
 
                 }
