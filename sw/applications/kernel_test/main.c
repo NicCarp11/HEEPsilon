@@ -166,14 +166,17 @@ void main()
                     kcom_perfRecordStart(   &(kperf.time.im2col) );
                     kernel->im2col(output_channel,out_row,0);
                     kcom_perfRecordStop( &(kperf.time.im2col));
-                    spent_time_im2col += kperf.time.im2col.spent_cy - kperf.time.dead.spent_cy;     
-
+                    spent_time_im2col += kperf.time.im2col.spent_cy - kperf.time.dead.spent_cy; 
+                    if(out_row == 0 && output_channel == 0)    
+                    printf("spent_time_im2col: %d\n",kperf.time.im2col.spent_cy);
                     kernel->config();
                     kcom_perfRecordIntrSet( &(kperf.time.cgra) );
                     kcom_perfRecordStart(   &(kperf.time.cgra) );
                     kcom_launchKernel( kernel_id );
                     kcom_waitingForIntr();
                     spent_time_CGRA += kperf.time.cgra.spent_cy - kperf.time.dead.spent_cy;
+                    
+                    
                     kernel->loading_buffer(output_channel,out_row,0);
                     }
                     
@@ -192,14 +195,19 @@ void main()
 
 
                 kcom_launchKernel( kernel_id );
-
-                        kernel->im2col(output_channel,out_row,out_col+1);
-
+                kcom_perfRecordIntrSet( &(kperf.time.im2col) );
+                    kcom_perfRecordStart(   &(kperf.time.im2col) );
+                    kernel->im2col(output_channel,out_row,out_col+1);
+                    kcom_perfRecordStop( &(kperf.time.im2col));
+                        
+                    
                      
                     kcom_waitingForIntr();
 
 
                 spent_time_CGRA += kperf.time.cgra.spent_cy - kperf.time.dead.spent_cy;
+                if(out_col==10 && out_row == 0 && output_channel == 0)    
+                    printf("spent_time_cgra: %d\n",kperf.time.cgra.spent_cy);
                 
                 kcom_perfRecordIntrSet( &(kperf.time.loading_result));
                 kcom_perfRecordStart(  &(kperf.time.loading_result));

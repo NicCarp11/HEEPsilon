@@ -144,10 +144,7 @@ out_row = out_row;
 out_col = out_col;
 output_channel = output_channel;
 im2col_conv(input_to_CGRA, out_row, out_col, output_channel);
-if(out_row == 0 && out_col == 1 && output_channel == 0){
-    for(int i = 0; i < row_filter * col_filter * C_filter; i++){
-    printf("input_to_CGRA[%d] = %d\n", i, input_to_CGRA[i]);}
-}
+
 }
 
 
