@@ -5,7 +5,7 @@ import renderassembly
 
 input_dim = 32
 filter_dimension = 3
-input_channel = 64
+input_channel = 32
 output_channel = 16
 first_cycle = 4*(input_dim - 3)
 second_cycle = 4*(input_dim - 3)*(input_dim)
