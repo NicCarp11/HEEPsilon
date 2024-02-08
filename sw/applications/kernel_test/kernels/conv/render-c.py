@@ -5,7 +5,7 @@ import renderim2col
 
 input_dim = 16
 filter_dimension = 3
-input_channel = 16
+input_channel = 64
 output_channel = 16
 
 data = {
