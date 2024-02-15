@@ -54,8 +54,8 @@ extern kcom_kernel_t conv_kernel;
 
 // filter parameters
 
-#define row_filter 3
-#define col_filter 3
+#define row_filter ${filter_dimension}
+#define col_filter ${filter_dimension}
 #define C_filter channel
 #define FILT_HALF_x (row_filter / 2)
 #define FILT_HALF_y (col_filter / 2)
@@ -88,16 +88,16 @@ static int32_t filter[N_filter][row_filter][col_filter][C_filter]=
 {
 % for i in range(0, output_channel):
     {
-% for j in range(0, 3):
+% for j in range(0, filter_dimension):
         {
-% for k in range(0, 3):
+% for k in range(0, filter_dimension):
             {
 % for l in range(0, input_channel):
                   ${1+l + k*input_channel}${"," if l != input_channel-1 else ""}
 % endfor     
-            }${"," if k != 3-1 else ""}
+            }${"," if k != filter_dimension-1 else ""}
 % endfor
-        }${"," if j != 3-1 else ""}
+        }${"," if j != filter_dimension-1 else ""}
 % endfor
     }${"," if i != output_channel-1 else ""}
 % endfor

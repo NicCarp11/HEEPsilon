@@ -140,10 +140,9 @@ typedef struct
     uint8_t     col_n;
     uint8_t     in_n;
     uint8_t     out_n;
-    void        ( *im2col ) (int output_channel, int out_row, int out_col);
-    void        ( *config )   (void);
+    void        ( *config ) (int output_ch);
     void        ( *func )   (void);
-    void        ( *loading_buffer )  (int output_channel, int out_row, int out_col);
+    void        ( *loading_buffer )  (void);
     uint32_t    ( *check )  (void);
     int8_t      name[ KERNEL_NAME_LENGTH_MAX ];
 } kcom_kernel_t;
