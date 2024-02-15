@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "*.tpl": "c",
+        "bitstream.h": "c",
+        "stdint.h": "c"
+    }
+}
