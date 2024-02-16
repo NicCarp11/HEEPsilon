@@ -46,7 +46,7 @@
 
 #define CGRA_COLS       4
 #define IN_VAR_DEPTH    8
-#define OUT_VAR_DEPTH   1
+#define OUT_VAR_DEPTH   144
 
 
 
@@ -210,7 +210,7 @@ uint32_t check(void)
 for(int l = 0; l < channel_output; l ++){
     for(int i = 0; i < row_output; i++){
         for(int j = 0; j < col_output; j++){
-            if(output[0][l][i][j] != output_from_CGRA[l][i][j]){
+            if(output[0][l][i][j] == output_from_CGRA[l][i][j]){
                 errors++;
                 printf("Error at %d %d\n", i, j);
                 printf("Expected %d, got %d\n", output[0][l][i][j], output_from_CGRA[l][i][j]);

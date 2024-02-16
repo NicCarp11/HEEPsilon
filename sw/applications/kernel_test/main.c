@@ -157,7 +157,7 @@ void main()
 #if JUAN           
 
 
-        for(int output_channel = 0; output_channel < channel_output; output_channel++){
+        for(int output_channel = 0; output_channel < 1; output_channel++){
             for(int out_row = 0; out_row < row_output; out_row++){
                 for(int out_col = 0; out_col < col_output; out_col++){
 
@@ -284,7 +284,7 @@ void main()
 
 #if PERFORM_RES_CHECK
             /* Result comparison */
-            //stats.errors += kernel->check();
+            stats.errors += kernel->check();
 #endif //PERFORM_RES_CHECK
 
 #if MEASUREMENTS

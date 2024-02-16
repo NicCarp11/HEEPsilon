@@ -6,7 +6,7 @@ import renderim2col
 input_dim = 16
 filter_dimension = 3
 input_channel = 16
-output_channel = 16
+output_channel = 1
 
 data = {
     'input_dim': input_dim,
@@ -29,4 +29,3 @@ print(f'File conv.h created/updated')
 
 renderassembly.renderassembly(input_dim, filter_dimension, input_channel, output_channel)
 renderim2col.renderim2col(input_channel)
-

@@ -17,6 +17,19 @@ void __attribute__((optimize("Os"))) im2col_conv(int32_t *input_to_CGRA, int out
 
 
 
+
+
+#if CHW_notHWC == 1
+for(i = 0; i < row_filter; i++){
+%for j in range(3):
+%for k in range(input_channel):
+input_to_CGRA[${k} + C_filter * ${j} + C_filter * col_filter*i] = input[0][${k}][i+out_row][${j}+out_col];
+
+%endfor
+%endfor  
+}
+
+#elif CHW_notHWC == 0
 for (i = 0; i < row_filter; i++)
       {
 
@@ -31,6 +44,7 @@ input_to_CGRA[${k} + C_filter * ${j} + C_filter * col_filter*i] = input[0][i+out
                   
             
           }
+#endif
 
         }
       
