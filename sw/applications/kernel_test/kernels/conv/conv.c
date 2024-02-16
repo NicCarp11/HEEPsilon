@@ -46,7 +46,7 @@
 
 #define CGRA_COLS       4
 #define IN_VAR_DEPTH    8
-#define OUT_VAR_DEPTH   4
+#define OUT_VAR_DEPTH   256
 
 
 
@@ -57,9 +57,9 @@
 /**                                                                        **/
 /****************************************************************************/
 
-static void        im2col_func  (int out_row, int out_col);
+
 static void         config(void);
-static void         loading_buffer(int out_row, int out_col);
+static void         loading_buffer(void);
 static void        software(void);
 static uint32_t    check   (void);
 static void         im2col_conv(int32_t *input_to_CGRA, int out_row, int out_col);
@@ -115,7 +115,6 @@ extern kcom_kernel_t conv_kernel = {
     .output = cgra_output,
     .config = config,
     .func   = software,
-    .im2col = im2col_func,
     .check  = check,
     .loading_buffer = loading_buffer,
     .name   = "convolution",
@@ -127,13 +126,7 @@ extern kcom_kernel_t conv_kernel = {
 /**                                                                        **/
 /****************************************************************************/
 
-void im2col_func(int out_row, int out_col){
-out_row = out_row;
-out_col = out_col;
-output_channel = output_channel;
-im2col_conv(input_to_CGRA, out_row, out_col);
 
-}
 void config(void)
 {
 
@@ -147,10 +140,10 @@ for(int i = 0; i < 4; i++){
 }
 
 for(int i = 4; i < 8; i++){
-    cgra_input[0][i] = &(input_to_CGRA[0]);
-    cgra_input[1][i] = &(input_to_CGRA[0]);
-    cgra_input[2][i] = &(input_to_CGRA[0]);
-    cgra_input[3][i] = &(input_to_CGRA[0]);
+    cgra_input[0][i] = &(input[0][0][0][0]);
+    cgra_input[1][i] = &(input[0][0][0][0]);
+    cgra_input[2][i] = &(input[0][0][0][0]);
+    cgra_input[3][i] = &(input[0][0][0][0]);
 }
 
 
@@ -160,17 +153,77 @@ cgra_input[0][1] = &filter_to_CGRA[0];
 */
 }
 
+/*
+void loading_buffer(){
 
-void loading_buffer(int out_row, int out_col){
-for(int i = 0; i < 4 ; i++){
+    for(int j = 0; j < row_output; j++){
+        for(int k = 0; k < col_output; k++){
+    output_from_CGRA[0][j][k]= cgra_output[0][0+k+j*col_output];
+    output_from_CGRA[1][j][k]= cgra_output[0][1+k+j*col_output];
+    output_from_CGRA[2][j][k]= cgra_output[0][2+k+j*col_output];
+    output_from_CGRA[3][j][k]= cgra_output[0][3+k+j*col_output];
+    output_from_CGRA[4][j][k]= cgra_output[1][0+k+j*col_output];
+    output_from_CGRA[5][j][k]= cgra_output[1][1+k+j*col_output];
+    output_from_CGRA[6][j][k]= cgra_output[1][2+k+j*col_output];
+    output_from_CGRA[7][j][k]= cgra_output[1][3+k+j*col_output];
+    output_from_CGRA[8][j][k]= cgra_output[2][0+k+j*col_output];
+    output_from_CGRA[9][j][k]= cgra_output[2][1+k+j*col_output];
+    output_from_CGRA[10][j][k]= cgra_output[2][2+k+j*col_output];
+    output_from_CGRA[11][j][k]= cgra_output[2][3+k+j*col_output];
+    output_from_CGRA[12][j][k]= cgra_output[3][0+k+j*col_output];
+    output_from_CGRA[13][j][k]= cgra_output[3][1+k+j*col_output];
+    output_from_CGRA[14][j][k]= cgra_output[3][2+k+j*col_output];
+    output_from_CGRA[15][j][k]= cgra_output[3][3+k+j*col_output];
+    printf("output_from_CGRA[0][%d][%d] = %d\n", j, k, output_from_CGRA[0][j][k]);
+    printf("output_from_CGRA[1][%d][%d] = %d\n", j, k, output_from_CGRA[1][j][k]);
+    printf("output_from_CGRA[2][%d][%d] = %d\n", j, k, output_from_CGRA[2][j][k]);
+    printf("output_from_CGRA[3][%d][%d] = %d\n", j, k, output_from_CGRA[3][j][k]);
+    printf("output_from_CGRA[4][%d][%d] = %d\n", j, k, output_from_CGRA[4][j][k]);
+    printf("output_from_CGRA[5][%d][%d] = %d\n", j, k, output_from_CGRA[5][j][k]);
+    printf("output_from_CGRA[6][%d][%d] = %d\n", j, k, output_from_CGRA[6][j][k]);
+    printf("output_from_CGRA[7][%d][%d] = %d\n", j, k, output_from_CGRA[7][j][k]);
+    printf("output_from_CGRA[8][%d][%d] = %d\n", j, k, output_from_CGRA[8][j][k]);
+    printf("output_from_CGRA[9][%d][%d] = %d\n", j, k, output_from_CGRA[9][j][k]);
+    printf("output_from_CGRA[10][%d][%d] = %d\n", j, k, output_from_CGRA[10][j][k]);
+    printf("output_from_CGRA[11][%d][%d] = %d\n", j, k, output_from_CGRA[11][j][k]);
+    printf("output_from_CGRA[12][%d][%d] = %d\n", j, k, output_from_CGRA[12][j][k]);
+    printf("output_from_CGRA[13][%d][%d] = %d\n", j, k, output_from_CGRA[13][j][k]);
+    printf("output_from_CGRA[14][%d][%d] = %d\n", j, k, output_from_CGRA[14][j][k]);
+    printf("output_from_CGRA[15][%d][%d] = %d\n", j, k, output_from_CGRA[15][j][k]);
 
-    output_from_CGRA[4*i]  [out_row][out_col] = cgra_output[0][i];
-    output_from_CGRA[4*i+1][out_row][out_col] = cgra_output[1][i];
-    output_from_CGRA[4*i+2][out_row][out_col] = cgra_output[2][i];
-    output_from_CGRA[4*i+3][out_row][out_col] = cgra_output[3][i];
+
+
+        }
+    }
+
+
 }
+*/
+
+void loading_buffer(){
+
+    for(int i = 0; i < 16 ; i++){
+
+      cgra_output[0][4*i];
+      cgra_output[1][4*i];
+      cgra_output[2][4*i];
+      cgra_output[3][4*i];
+      cgra_output[0][4*i+1];
+      cgra_output[1][4*i+1];
+      cgra_output[2][4*i+1];
+      cgra_output[3][4*i+1];
+      cgra_output[0][4*i+2];
+      cgra_output[1][4*i+2];
+      cgra_output[2][4*i+2];
+      cgra_output[3][4*i+2];
+      cgra_output[0][4*i+3];
+      cgra_output[1][4*i+3];
+      cgra_output[2][4*i+3];
+      cgra_output[3][4*i+3];      
 }
 
+    
+}
 
 void software(void)
 {
