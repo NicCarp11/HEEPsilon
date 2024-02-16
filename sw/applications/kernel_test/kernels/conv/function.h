@@ -17,9 +17,10 @@ void conv2D()
       {
         for (c = 0; c < col_output; c++)
         {
-          S = 0;
+          
           for (w = 0; w < C_filter; w++)
           {
+            S = 0;
             for (i = -FILT_HALF_x; i <= FILT_HALF_x; i++)
             {
               for (j = -FILT_HALF_y; j <= FILT_HALF_y; j++)
@@ -30,8 +31,9 @@ void conv2D()
                 S += coeff * data;
               }
             }
+            outputs[l][w][r][c] = S;
           }
-          outputs[l][k][r][c] = S;
+          
         }
       }
     }

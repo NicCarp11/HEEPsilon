@@ -64,7 +64,7 @@ extern kcom_kernel_t conv_kernel;
 #define N_output batch_size
 #define row_output (((row_input + 2 * padding - row_filter) / stride) + 1)
 #define col_output (((col_input + 2 * padding - col_filter) / stride) + 1)
-#define channel_output N_filter
+#define channel_output channel
 
 /*input 16x16x16*/
 static int32_t input[batch_size][C_input][row_input][col_input]=

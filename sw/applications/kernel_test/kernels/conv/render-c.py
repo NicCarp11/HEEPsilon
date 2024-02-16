@@ -3,10 +3,10 @@ import renderassembly
 
 
 
-input_dim = 64
+input_dim = 16
 filter_dimension = 3
 input_channel = 16
-output_channel = 16
+output_channel = 1
 
 data = {
     'input_dim': input_dim,
