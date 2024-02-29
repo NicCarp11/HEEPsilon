@@ -5,9 +5,7 @@ For a brief insight on HEEPsilon please refer to our abstract:
 
 📄 [An Open-Hardware Coarse-Grained Reconfigurable Array for Edge Computing](https://dl.acm.org/doi/10.1145/3587135.3591437).
 
-As an X-HEEP spinoff, HEEPsilon keeps all X-HEEP functionalities, from RTL simulation on Verilator, VCS and Questasim to implementation on the [PYNQ-Z2 FPGA](https://www.xilinx.com/support/university/xup-boards/XUPPYNQ-Z2.html). Our cousin HEEPocrates was recently taped-out in TSMC 65nm process and is currently undertaking tests successfully.
-
-In addition to all the tools available for X-HEEP, HEEPsilon is building a toolchain to simplify the C-code→CGRA process.
+As an X-HEEP spinoff, HEEPsilon keeps all X-HEEP functionalities, from RTL simulation on Verilator, VCS and Questasim to implementation on the [PYNQ-Z2 FPGA](https://www.xilinx.com/support/university/xup-boards/XUPPYNQ-Z2.html).
 
 ---
 
@@ -61,10 +59,10 @@ data = {
     'output_channel': output_channel,
 }
 ```
-By changing this file, and run again `script.sh`, automatically you have both the assmebly instructions and firmware code updated.
+By changing these intial lines, and run again `script.sh`, automatically you have both the assmebly instructions and firmware code updated.
 
 # Compiling with Makefile
-As previous, in order to compile and try either a simulation on Verilator or an implementation on the [PYNQ-Z2 FPGA], you can follow [X-HEEP's compiling with Makefile](https://x-heep.readthedocs.io/en/latest/How_to/CompileMakefile.html)
+As previously, in order to compile and try either a simulation on Verilator or an implementation on the [PYNQ-Z2 FPGA], you can follow [X-HEEP's compiling with Makefile](https://x-heep.readthedocs.io/en/latest/How_to/CompileMakefile.html)
 
 When generating core-v-mini-mcu package for an implementation on the PYNQ-Z2, we highly suggest this kind of configuration:
 
