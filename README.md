@@ -15,39 +15,66 @@ In addition to all the tools available for X-HEEP, HEEPsilon is building a toolc
 
 Due to its modular design, HEEPsilon respects the X-HEEP workflow. As such, you can follow [X-HEEP's getting started](https://x-heep.readthedocs.io/en/latest/How_to/GettingStarted.html) to set up the environment... HOWEVER...
 
-Althought the HEEPsilon team will try to keep the latest version of X-HEEP available, changes in the X-HEEP setup might not reflect immediately on this repository.
-
-👉 For the most accurate set-up instructions please refer to the documentation of the [vendorized X-HEEP](https://github.com/esl-epfl/cgra_x_heep/tree/main/hw/vendor/esl_epfl_x_heep).
-
-
 # Behavioural simulations
 
 The CGRA used in HEEPsilon can be simulated with CGRA-instruction accuracy using the [ESL-CGRA simulator](https://github.com/esl-epfl/ESL-CGRA-simulator).
 This allows for fast and easy-to-debug design of kernels for the CGRA. Once you are happy with your design you can compile the assembly and get the bitstream to load into the CGRA.
 
-# SAT-MapIt Compiler
+# Preparing set-up for kernel with weight parallelism
+This section quickly describes the content of this repository, so that you may be able to test the convolutional kernel implemented with weight parallelism.
 
-Your kernel is too complex to be mapped manually? Try using the [SAT-MapIt mapper and compiler](https://github.com/CristianTirelli/SAT-MapIt). Properly label your C-code and let SAT-MapIt find an efficient mapping you can test in the simulator and deploy in the CGRA.
+.
+├── .github
+├── docs
+├── hw
+├── script
+├── sw
+│   ├── applications
+│   │   ├── kernel_test
+│   │   │   ├── kernels
+│   │   │   │   ├── conv
+│   │   │   │   │   └── render-c.py
+│   ├── external
+├── tb
+├── util
+├── Makefile
+├── README.md
+├── cgra_x_heep.core
+└── script.sh
 
-# Testing a kernel
+For this kind of activity, we are going to test the initial kernel configuration: I<sub>x</sub>=I<sub>y</sub>=16, F<sub>x</sub>=F<sub>y</sub>=3, C=K=16. In this particularly case, you just need to run the `script.sh`, since it is configured to prepare both the assembly instructions and firmaware for this kind of application.
 
-Once you have tested your setup with the `cgra_func_test` application you can start trying out different kernels. HEEPsilon provides a set of tools to easily go from C-code to CGRA bitstreams. All kernels are converted into a standard C source and header file pair which you can use with the `kernel_test` application to measure the speed-up of your CGRA implementation as well as see stochastical variations.
+# Modifying hyper-parameter 
+In case you want to change hyper-parameter, you can easily modify them, by accessing to `render-c.py`. This file is formatted in this way:
+```
+input_dim = 16
+filter_dimension = 3
+input_channel = 16
+output_channel = 16
 
-# Adding a complex environment to your platform
+data = {
+    'input_dim': input_dim,
+    'output_row': input_dim-filter_dimension+1,
+    'output_col': input_dim-filter_dimension+1,
+    'input_channel': input_channel,
+    'output_channel': output_channel,
+}
+```
+By changing this file, and run again `script.sh`, automatically you have both the assmebly instructions and firmware code updated.
 
-If you application requires some hardcore input-output management, maybe you want to try out the [X-HEEP FEMU](https://github.com/simone-machetti/x-heep-femu). Connect your PYNQ-Z2 FPGA via SSH and start deploying different hardware versions of X-HEEP or HEEPsilon, test different software applications and interface with the hardware from the comfort of Python scripts or Jupyter notebooks.
+# Compiling with Makefile
+As previous, in order to compile and try either a simulation on Verilator or an implementation on the [PYNQ-Z2 FPGA], you can follow [X-HEEP's compiling with Makefile](https://x-heep.readthedocs.io/en/latest/How_to/CompileMakefile.html)
 
-# Wanna collaborate?
+When generating core-v-mini-mcu package for an implementation on the PYNQ-Z2, we highly suggest this kind of configuration:
 
-HEEPsilon is a newborn project that already brings together dozens of researchers from 4 universities across Switzerland, Spain and Italy. There is plenty of cool work to be done for and with HEEPsilon, join us!
+```
+make mcu-gen MEMORY_BANKS=5
+```
+This number is the result of exploration between different memory banks, and is the one used for this project.
 
-Pending work includes:
-* Development of new kernels for the CGRA and validation in real applications.
-* Integration of the different compilation tools into a single workflow.
-* Extracting variable information from the LLVM pass during C-code → CGRA assembly process.
-* Characterizing the CGRA hardware for cycle and energy-accurate simulation.
+In order to either simulate on Verilator or implement on PYNQ we remind you to you to add the option `PROJECT=kernel_test` to their corresponding scripts.
 
-# Contact us
 
-Have some questions? Don't hesitate to contact us: juan.sapriza@epfl.ch
+
+
 
