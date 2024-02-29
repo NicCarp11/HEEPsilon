@@ -23,6 +23,7 @@ This allows for fast and easy-to-debug design of kernels for the CGRA. Once you 
 # Preparing set-up for kernel with weight parallelism
 This section quickly describes the content of this repository, so that you may be able to test the convolutional kernel implemented with weight parallelism.
 
+```
 .
 ├── .github
 ├── docs
@@ -41,7 +42,7 @@ This section quickly describes the content of this repository, so that you may b
 ├── README.md
 ├── cgra_x_heep.core
 └── script.sh
-
+```
 For this kind of activity, we are going to test the initial kernel configuration: I<sub>x</sub>=I<sub>y</sub>=16, F<sub>x</sub>=F<sub>y</sub>=3, C=K=16. In this particularly case, you just need to run the `script.sh`, since it is configured to prepare both the assembly instructions and firmaware for this kind of application.
 
 # Modifying hyper-parameter 
