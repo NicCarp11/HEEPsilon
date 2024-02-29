@@ -13,7 +13,7 @@ In addition to all the tools available for X-HEEP, HEEPsilon is building a toolc
 
 # Getting started
 
-Due to its modular design, HEEPsilon respects the X-HEEP workflow. As such, you can follow [X-HEEP's getting started](https://x-heep.readthedocs.io/en/latest/How_to/GettingStarted.html) to set up the environment... HOWEVER...
+Due to its modular design, HEEPsilon respects the X-HEEP workflow. As such, you can follow [X-HEEP's getting started](https://x-heep.readthedocs.io/en/latest/How_to/GettingStarted.html) to set up the environment.
 
 # Behavioural simulations
 
